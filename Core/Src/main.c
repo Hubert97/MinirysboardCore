@@ -26,6 +26,7 @@
 #include "Modbus.h"
 #include "semphr.h"
 #include "MinirysboardStateMachine.h"
+#include "IO_check.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -127,6 +128,15 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
 
+
+
+
+
+
+  ///////////////////////////////////// IO TEST LINE ///////////////////
+  TEST_IO();
+  /////////////////////////////////////Coment to run OS///////////////////
+
   modbus_h.uiModbusType = SLAVE_RTU;
   modbus_h.port =  &huart1;
   modbus_h.u8id = 10; //Modbus slave ID
@@ -141,6 +151,8 @@ int main(void)
 
   HAL_ADC_Start_DMA(&hadc1,&MachineStateData.AnalogInputs.ADC_Input[0] ,12);
   HAL_ADC_Start(&hadc1);
+
+
 
   /* USER CODE END 2 */
 
@@ -215,11 +227,11 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV4;
-  RCC_OscInitStruct.PLL.PLLN = 80;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV2;
+  RCC_OscInitStruct.PLL.PLLN = 8;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
-  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV5;
+  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV8;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -232,7 +244,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_2) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
   {
     Error_Handler();
   }
@@ -267,7 +279,7 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.ScanConvMode = ADC_SCAN_SEQ_FIXED;
@@ -333,13 +345,6 @@ static void MX_ADC1_Init(void)
   }
   /** Configure Regular Channel
   */
-  sConfig.Channel = ADC_CHANNEL_6;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure Regular Channel
-  */
   sConfig.Channel = ADC_CHANNEL_7;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
@@ -391,8 +396,6 @@ static void MX_TIM17_Init(void)
 
   /* USER CODE END TIM17_Init 0 */
 
-  TIM_IC_InitTypeDef sConfigIC = {0};
-
   /* USER CODE BEGIN TIM17_Init 1 */
 
   /* USER CODE END TIM17_Init 1 */
@@ -404,18 +407,6 @@ static void MX_TIM17_Init(void)
   htim17.Init.RepetitionCounter = 0;
   htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim17) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_TIM_IC_Init(&htim17) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigIC.ICPolarity = TIM_INPUTCHANNELPOLARITY_RISING;
-  sConfigIC.ICSelection = TIM_ICSELECTION_DIRECTTI;
-  sConfigIC.ICPrescaler = TIM_ICPSC_DIV1;
-  sConfigIC.ICFilter = 0;
-  if (HAL_TIM_IC_ConfigChannel(&htim17, &sConfigIC, TIM_CHANNEL_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -499,32 +490,41 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
-  __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LED_B_Pin|ENABLE_STEPPER_MOTORS_Pin|ENABLE_TOFS_Pin|PWM_FAN_Pin
+                          |ENABLE_RAIL_12V_Pin|ENABLE_RAIL_5V_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_R_Pin|ENABLE_SENSORS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : LED_B_Pin */
-  GPIO_InitStruct.Pin = LED_B_Pin;
-  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-  GPIO_InitStruct.Pull = GPIO_NOPULL;
-  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_B_GPIO_Port, &GPIO_InitStruct);
+  /*Configure GPIO pin : Power_Switch_Pin */
+  GPIO_InitStruct.Pin = Power_Switch_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(Power_Switch_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : LED_R_Pin */
-  GPIO_InitStruct.Pin = LED_R_Pin;
+  /*Configure GPIO pins : LED_B_Pin ENABLE_STEPPER_MOTORS_Pin ENABLE_TOFS_Pin PWM_FAN_Pin
+                           ENABLE_RAIL_12V_Pin ENABLE_RAIL_5V_Pin */
+  GPIO_InitStruct.Pin = LED_B_Pin|ENABLE_STEPPER_MOTORS_Pin|ENABLE_TOFS_Pin|PWM_FAN_Pin
+                          |ENABLE_RAIL_12V_Pin|ENABLE_RAIL_5V_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(LED_R_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : LED_R_Pin ENABLE_SENSORS_Pin */
+  GPIO_InitStruct.Pin = LED_R_Pin|ENABLE_SENSORS_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
   /*Configure GPIO pin : LED_G_Pin */
   GPIO_InitStruct.Pin = LED_G_Pin;

@@ -71,6 +71,8 @@ void Error_Handler(void);
 #define BOARD_TEMP_PROBE1_GPIO_Port GPIOA
 #define BOARD_TEMP_PROBE2_Pin GPIO_PIN_5
 #define BOARD_TEMP_PROBE2_GPIO_Port GPIOA
+#define Power_Switch_Pin GPIO_PIN_6
+#define Power_Switch_GPIO_Port GPIOA
 #define VBAT_1_Pin GPIO_PIN_7
 #define VBAT_1_GPIO_Port GPIOA
 #define VBAT_2_Pin GPIO_PIN_0
@@ -85,6 +87,18 @@ void Error_Handler(void);
 #define LED_G_GPIO_Port GPIOC
 #define BAT_CURRENT_Pin GPIO_PIN_12
 #define BAT_CURRENT_GPIO_Port GPIOA
+#define ENABLE_SENSORS_Pin GPIO_PIN_15
+#define ENABLE_SENSORS_GPIO_Port GPIOA
+#define ENABLE_STEPPER_MOTORS_Pin GPIO_PIN_3
+#define ENABLE_STEPPER_MOTORS_GPIO_Port GPIOB
+#define ENABLE_TOFS_Pin GPIO_PIN_4
+#define ENABLE_TOFS_GPIO_Port GPIOB
+#define PWM_FAN_Pin GPIO_PIN_5
+#define PWM_FAN_GPIO_Port GPIOB
+#define ENABLE_RAIL_12V_Pin GPIO_PIN_7
+#define ENABLE_RAIL_12V_GPIO_Port GPIOB
+#define ENABLE_RAIL_5V_Pin GPIO_PIN_8
+#define ENABLE_RAIL_5V_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

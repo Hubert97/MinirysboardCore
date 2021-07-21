@@ -51,7 +51,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
- ../Core/Inc/MinirysboardStateMachine.h ../Core/Inc/main.h
+ ../Core/Inc/MinirysboardStateMachine.h ../Core/Inc/main.h \
+ ../Core/Inc/IO_check.h
 
 ../Core/Inc/main.h:
 
@@ -162,3 +163,5 @@ C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MODBUS-LIB/Inc/Modbus.h:
 ../Core/Inc/MinirysboardStateMachine.h:
 
 ../Core/Inc/main.h:
+
+../Core/Inc/IO_check.h:
