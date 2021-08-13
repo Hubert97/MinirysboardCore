@@ -89,6 +89,28 @@ void TEST_IO(){
 
 
 }
+void Analog_Only(){
+
+
+
+    HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, 0);
+    HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, 0);
+    HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, 0);
+    HAL_GPIO_WritePin(ENABLE_SENSORS_GPIO_Port, ENABLE_SENSORS_Pin, 1);
+    HAL_Delay(1000);
+
+    HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, 1);
+    HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, 1);
+    HAL_GPIO_WritePin(LED_R_GPIO_Port, LED_R_Pin, 1);
+    HAL_GPIO_WritePin(ENABLE_SENSORS_GPIO_Port, ENABLE_SENSORS_Pin, 0);
+
+
+
+
+
+
+
+}
 
 
 #endif /* INC_IO_CHECK_H_ */

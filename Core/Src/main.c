@@ -23,9 +23,10 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "msm_runtime.h"
+#include <minirysboard_state_machine_utils.h>
 #include "Modbus.h"
 #include "semphr.h"
-#include "MinirysboardStateMachine.h"
 #include "IO_check.h"
 /* USER CODE END Includes */
 
@@ -133,9 +134,10 @@ int main(void)
 
 
 
-  ///////////////////////////////////// IO TEST LINE ///////////////////
-  TEST_IO();
-  /////////////////////////////////////Coment to run OS///////////////////
+ // ///////////////////////////////////// IO TEST LINE ///////////////////
+ // TEST_IO();
+ // /////////////////////////////////////Coment to run OS///////////////////
+  MSM_PreflightCheck(&MachineStateData);
 
   modbus_h.uiModbusType = SLAVE_RTU;
   modbus_h.port =  &huart1;
@@ -149,7 +151,7 @@ int main(void)
   ModbusInit(&modbus_h);
   ModbusStart(&modbus_h);
 
-  HAL_ADC_Start_DMA(&hadc1,&MachineStateData.AnalogInputs.ADC_Input[0] ,12);
+  HAL_ADC_Start_DMA(&hadc1,&MachineStateData.AnalogInputs.ADCInput[0] ,12);
   HAL_ADC_Start(&hadc1);
 
 
@@ -554,13 +556,14 @@ void main_logic_setup(void *argument)
   /* Infinite loop */
   for(;;)
   {
+
 	//zablokowanie pamieci wspoldzielonej
 	xSemaphoreTake(modbus_h.ModBusSphrHandle , 100);
 	HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, modbus_h.au16regs[0] & 0x1);
 
 	//synchronizacja danych
 	ModbusDATA[1]=MachineStateData.FanSpeedRPM;
-	MSM_DataCopy(&ModbusDATA[2],&MachineStateData.AnalogInputs.ADC_Input[0],12);
+	MSM_DataCopy(&ModbusDATA[2],&MachineStateData.AnalogInputs.ADCInput[0],12);
 
 	xSemaphoreGive(modbus_h.ModBusSphrHandle);
 	//odblokowanie pamieci wspoldzielonej

@@ -49,9 +49,11 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
+ ../Core/Inc/msm_runtime.h ../Core/Inc/minirysboard_state_machine_utils.h \
+ ../Core/Inc/main.h ../Core/Inc/temperature_state_machine.h \
+ ../Core/Inc/minirysboard_state_machine_utils.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
- ../Core/Inc/MinirysboardStateMachine.h ../Core/Inc/main.h \
  ../Core/Inc/IO_check.h
 
 ../Core/Inc/main.h:
@@ -156,12 +158,18 @@ C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MODBUS-LIB/Inc/Modbus.h:
 
 ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
 
+../Core/Inc/msm_runtime.h:
+
+../Core/Inc/minirysboard_state_machine_utils.h:
+
+../Core/Inc/main.h:
+
+../Core/Inc/temperature_state_machine.h:
+
+../Core/Inc/minirysboard_state_machine_utils.h:
+
 ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
 
 ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
-
-../Core/Inc/MinirysboardStateMachine.h:
-
-../Core/Inc/main.h:
 
 ../Core/Inc/IO_check.h:
