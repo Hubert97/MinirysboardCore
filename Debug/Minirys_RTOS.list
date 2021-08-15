@@ -21,31 +21,31 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, ALLOC, LOAD, DATA
   8 .data         00000010  20000000  080060f0  00020000  2**2
                   CONTENTS, ALLOC, LOAD, DATA
-  9 .bss          000016f0  20000010  08006100  00020010  2**2
+  9 .bss          000016f8  20000010  08006100  00020010  2**2
                   ALLOC
- 10 ._user_heap_stack 00000600  20001700  08006100  00021700  2**0
+ 10 ._user_heap_stack 00000600  20001708  08006100  00021708  2**0
                   ALLOC
  11 .ARM.attributes 00000028  00000000  00000000  00020010  2**0
                   CONTENTS, READONLY
- 12 .debug_info   0002b2b5  00000000  00000000  00020038  2**0
+ 12 .debug_info   0002b389  00000000  00000000  00020038  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 13 .debug_abbrev 00005341  00000000  00000000  0004b2ed  2**0
+ 13 .debug_abbrev 0000532c  00000000  00000000  0004b3c1  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 14 .debug_aranges 00001548  00000000  00000000  00050630  2**3
+ 14 .debug_aranges 00001558  00000000  00000000  000506f0  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 15 .debug_macro  0001a4f4  00000000  00000000  00051b78  2**0
+ 15 .debug_macro  0001a517  00000000  00000000  00051c48  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 16 .debug_line   00024e89  00000000  00000000  0006c06c  2**0
+ 16 .debug_line   00024f26  00000000  00000000  0006c15f  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 17 .debug_str    000a7071  00000000  00000000  00090ef5  2**0
+ 17 .debug_str    000a713a  00000000  00000000  00091085  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 18 .comment      00000053  00000000  00000000  00137f66  2**0
+ 18 .comment      00000053  00000000  00000000  001381bf  2**0
                   CONTENTS, READONLY
- 19 .debug_loc    00018926  00000000  00000000  00137fb9  2**0
+ 19 .debug_loc    0001895b  00000000  00000000  00138212  2**0
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 20 .debug_ranges 00002cd8  00000000  00000000  001508e0  2**3
+ 20 .debug_ranges 00002ce8  00000000  00000000  00150b70  2**3
                   CONTENTS, READONLY, DEBUGGING, OCTETS
- 21 .debug_frame  00004108  00000000  00000000  001535b8  2**2
+ 21 .debug_frame  00004130  00000000  00000000  00153858  2**2
                   CONTENTS, READONLY, DEBUGGING, OCTETS
 
 Disassembly of section .text:
@@ -902,12 +902,12 @@ void MSM_DataCopy(analog_data * Dest,const analog_data * Source, uint8_t NoOfByt
   for(;;)
  80006ec:	e7d4      	b.n	8000698 <main_logic_setup+0x4>
  80006ee:	46c0      	nop			; (mov r8, r8)
- 80006f0:	200013b0 	.word	0x200013b0
+ 80006f0:	200013b8 	.word	0x200013b8
  80006f4:	50000400 	.word	0x50000400
- 80006f8:	200015f0 	.word	0x200015f0
- 80006fc:	2000138c 	.word	0x2000138c
- 8000700:	20001390 	.word	0x20001390
- 8000704:	20001340 	.word	0x20001340
+ 80006f8:	200015f8 	.word	0x200015f8
+ 80006fc:	20001390 	.word	0x20001390
+ 8000700:	20001394 	.word	0x20001394
+ 8000704:	20001344 	.word	0x20001344
 
 08000708 <MSM_PreflightCheck>:
  *
@@ -1634,7 +1634,7 @@ void Error_Handler(void)
  8000adc:	601a      	str	r2, [r3, #0]
   modbus_h.u16regsize = sizeof(ModbusDATA)/sizeof(ModbusDATA[0]);
  8000ade:	0033      	movs	r3, r6
- 8000ae0:	2210      	movs	r2, #16
+ 8000ae0:	2212      	movs	r2, #18
  8000ae2:	33b0      	adds	r3, #176	; 0xb0
   ModbusInit(&modbus_h);
  8000ae4:	0030      	movs	r0, r6
@@ -1682,9 +1682,9 @@ void Error_Handler(void)
  8000b2c:	40021000 	.word	0x40021000
  8000b30:	50000400 	.word	0x50000400
  8000b34:	50000800 	.word	0x50000800
- 8000b38:	20001560 	.word	0x20001560
+ 8000b38:	20001568 	.word	0x20001568
  8000b3c:	40013800 	.word	0x40013800
- 8000b40:	200014fc 	.word	0x200014fc
+ 8000b40:	20001504 	.word	0x20001504
  8000b44:	40012400 	.word	0x40012400
  8000b48:	04000002 	.word	0x04000002
  8000b4c:	08000004 	.word	0x08000004
@@ -1696,18 +1696,18 @@ void Error_Handler(void)
  8000b64:	24000200 	.word	0x24000200
  8000b68:	40010000 	.word	0x40010000
  8000b6c:	b0001000 	.word	0xb0001000
- 8000b70:	20001340 	.word	0x20001340
+ 8000b70:	20001344 	.word	0x20001344
  8000b74:	40014800 	.word	0x40014800
  8000b78:	0000ffff 	.word	0x0000ffff
- 8000b7c:	200015f0 	.word	0x200015f0
- 8000b80:	200013b0 	.word	0x200013b0
- 8000b84:	2000138c 	.word	0x2000138c
+ 8000b7c:	200015f8 	.word	0x200015f8
+ 8000b80:	200013b8 	.word	0x200013b8
+ 8000b84:	20001390 	.word	0x20001390
  8000b88:	08005f54 	.word	0x08005f54
  8000b8c:	08000695 	.word	0x08000695
- 8000b90:	2000133c 	.word	0x2000133c
+ 8000b90:	20001340 	.word	0x20001340
  8000b94:	08005f30 	.word	0x08005f30
  8000b98:	08000671 	.word	0x08000671
- 8000b9c:	2000166c 	.word	0x2000166c
+ 8000b9c:	20001674 	.word	0x20001674
 
 08000ba0 <HAL_TIM_PeriodElapsedCallback>:
   if (htim->Instance == TIM1) {
@@ -1955,7 +1955,7 @@ void HAL_ADC_MspInit(ADC_HandleTypeDef* hadc)
  8000ca0:	40021000 	.word	0x40021000
  8000ca4:	000010bf 	.word	0x000010bf
  8000ca8:	50000400 	.word	0x50000400
- 8000cac:	20001610 	.word	0x20001610
+ 8000cac:	20001618 	.word	0x20001618
  8000cb0:	40020008 	.word	0x40020008
 
 08000cb4 <HAL_TIM_Base_MspInit>:
@@ -2206,7 +2206,7 @@ HAL_StatusTypeDef HAL_InitTick(uint32_t TickPriority)
  8000db8:	bd10      	pop	{r4, pc}
  8000dba:	46c0      	nop			; (mov r8, r8)
  8000dbc:	40021000 	.word	0x40021000
- 8000dc0:	20001670 	.word	0x20001670
+ 8000dc0:	20001678 	.word	0x20001678
  8000dc4:	40012c00 	.word	0x40012c00
  8000dc8:	000f4240 	.word	0x000f4240
  8000dcc:	000003e7 	.word	0x000003e7
@@ -2249,7 +2249,7 @@ void DMA1_Channel1_IRQHandler(void)
 }
  8000ddc:	bd10      	pop	{r4, pc}
  8000dde:	46c0      	nop			; (mov r8, r8)
- 8000de0:	20001610 	.word	0x20001610
+ 8000de0:	20001618 	.word	0x20001618
 
 08000de4 <TIM1_BRK_UP_TRG_COM_IRQHandler>:
 
@@ -2271,7 +2271,7 @@ void TIM1_BRK_UP_TRG_COM_IRQHandler(void)
 }
  8000dec:	bd10      	pop	{r4, pc}
  8000dee:	46c0      	nop			; (mov r8, r8)
- 8000df0:	20001670 	.word	0x20001670
+ 8000df0:	20001678 	.word	0x20001678
 
 08000df4 <USART1_IRQHandler>:
 
@@ -2293,7 +2293,7 @@ void USART1_IRQHandler(void)
 }
  8000dfc:	bd10      	pop	{r4, pc}
  8000dfe:	46c0      	nop			; (mov r8, r8)
- 8000e00:	20001560 	.word	0x20001560
+ 8000e00:	20001568 	.word	0x20001568
 
 08000e04 <SystemInit>:
 {
@@ -2408,7 +2408,7 @@ LoopForever:
   ldr r2, =_sbss
  8000e5c:	20000010 	.word	0x20000010
   ldr r4, =_ebss
- 8000e60:	20001700 	.word	0x20001700
+ 8000e60:	20001708 	.word	0x20001708
 
 08000e64 <ADC1_IRQHandler>:
  * @retval None
@@ -2481,7 +2481,7 @@ __weak void HAL_IncTick(void)
 }
  8000e9c:	4770      	bx	lr
  8000e9e:	46c0      	nop			; (mov r8, r8)
- 8000ea0:	200016bc 	.word	0x200016bc
+ 8000ea0:	200016c4 	.word	0x200016c4
  8000ea4:	20000004 	.word	0x20000004
 
 08000ea8 <HAL_GetTick>:
@@ -2496,7 +2496,7 @@ __weak uint32_t HAL_GetTick(void)
 }
  8000eac:	4770      	bx	lr
  8000eae:	46c0      	nop			; (mov r8, r8)
- 8000eb0:	200016bc 	.word	0x200016bc
+ 8000eb0:	200016c4 	.word	0x200016c4
 
 08000eb4 <HAL_Delay>:
   *       implementations in user file.
@@ -14005,7 +14005,7 @@ BaseType_t xReturn;
  8004bc6:	d1f4      	bne.n	8004bb2 <vQueueAddToRegistry+0x6>
  8004bc8:	e7fa      	b.n	8004bc0 <vQueueAddToRegistry+0x14>
  8004bca:	46c0      	nop			; (mov r8, r8)
- 8004bcc:	200016c0 	.word	0x200016c0
+ 8004bcc:	200016c8 	.word	0x200016c8
 
 08004bd0 <vQueueUnregisterQueue>:
 	{
@@ -14050,7 +14050,7 @@ BaseType_t xReturn;
  8004bee:	2b08      	cmp	r3, #8
  8004bf0:	d1f2      	bne.n	8004bd8 <vQueueUnregisterQueue+0x8>
  8004bf2:	e7f9      	b.n	8004be8 <vQueueUnregisterQueue+0x18>
- 8004bf4:	200016c0 	.word	0x200016c0
+ 8004bf4:	200016c8 	.word	0x200016c8
 
 08004bf8 <vQueueDelete>:
 {

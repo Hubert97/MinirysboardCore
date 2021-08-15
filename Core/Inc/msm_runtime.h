@@ -9,8 +9,12 @@
 #define INC_MSM_RUNTIME_H_
 #include "minirysboard_state_machine_utils.h"
 #include "temperature_state_machine.h"
+#include "comunication_state_machine.h"
+#include "voltage_current_state_machine.h"
 
 struct TStateMachineDataType TSM;
+struct CommStateMachineDataType CM;
+struct VCtateMachineDataType VCM;
 
 /**
  * @brief Main of this task is to manage state machines and wight their outputs
@@ -31,7 +35,15 @@ struct TStateMachineDataType TSM;
  * Than voltage state machine says that 5V rail cant be on because batteries are discharged.
  * At the end only efectors to which no state machine has objection is left on/turned on. For exaple temperature sensors.
  *
- * PollVector description
+ ***************  Board Configuration Description  **********
+ *
+ * 0 - board error - all of.
+ * 1 - board on external 5V - uart and analog sensor data.
+ * 2 - on leaah/battery - No Fan detected.
+ * 3 - on leash/battery - Fan detected.
+ *
+ *
+ ***************  PollVector description  ********************
  * Vector has 8 bits.  Each bit corresponds to one efector
  *
  * __7___6___5___4___3___2___1___0__
@@ -58,6 +70,8 @@ struct TStateMachineDataType TSM;
  * 1 - BATT Enable
  * 0 - External sensors
  *
+ *
+ *
  */
 
 
@@ -71,8 +85,8 @@ void MSM_Runtime(struct MSM_StateDataType  * Robot_State)
     case 0:
 	break;
     case 1:
-	// todo set execution vector to max allowed config
-	// todo run comms state machine
+	PollVector=0x89;// todo set execution vector to max allowed config
+	CommSM_Runtime(&CM, ModbusDATA, &PollVector);//run comms state machine
 	// todo run voltage/current state machine
 	break;
     case 2:
@@ -85,7 +99,7 @@ void MSM_Runtime(struct MSM_StateDataType  * Robot_State)
 	// todo set execution vector to max allowed config
 	// todo run comms state machine
 	// todo run voltage/current state machine
-	TSM_Runtime(&TSM,(Robot_State->AnalogInputs.ADCInput), &PollVector);// todo run temperature state machine
+	// TSM_Runtime(&TSM,(Robot_State->AnalogInputs.ADCInput), &PollVector);// todo run temperature state machine
 	// todo run fan controller
 	break;
 	}

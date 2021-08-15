@@ -6,7 +6,9 @@ minirysboard_state_machine_utils.h:96:5:MSM_CheckAnalogSensors	0	static
 minirysboard_state_machine_utils.h:106:6:MSM_EmergencyShutdown	16	static
 minirysboard_state_machine_utils.h:119:6:MSM_Normal_Shutdown	16	static
 minirysboard_state_machine_utils.h:145:6:MSM_PreflightCheck	32	static
-msm_runtime.h:64:6:MSM_Runtime	8	static
+comunication_state_machine.h:45:6:CommSM_Runtime	4	static
+voltage_current_state_machine.h:24:6:VCSM_Runtime	0	static
+msm_runtime.h:78:6:MSM_Runtime	8	static
 IO_check.h:15:6:TEST_IO	16	static
 IO_check.h:92:6:Analog_Only	24	static
 main.c:214:6:SystemClock_Config	128	static,ignoring_inline_asm

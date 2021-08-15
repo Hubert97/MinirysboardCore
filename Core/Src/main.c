@@ -43,7 +43,7 @@
 /* USER CODE BEGIN PM */
 
 modbusHandler_t modbus_h;
-uint16_t ModbusDATA[16];
+uint16_t ModbusDATA[18];
 
 struct MSM_StateDataType MachineStateData;
 

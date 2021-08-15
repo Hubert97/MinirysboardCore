@@ -38,7 +38,7 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 extern modbusHandler_t modbus_h;
-extern uint16_t ModbusDATA[16];
+extern uint16_t ModbusDATA[18];
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/

@@ -52,6 +52,8 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Core/Inc/msm_runtime.h ../Core/Inc/minirysboard_state_machine_utils.h \
  ../Core/Inc/main.h ../Core/Inc/temperature_state_machine.h \
  ../Core/Inc/minirysboard_state_machine_utils.h \
+ ../Core/Inc/comunication_state_machine.h \
+ ../Core/Inc/voltage_current_state_machine.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Core/Inc/IO_check.h
@@ -167,6 +169,10 @@ C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MODBUS-LIB/Inc/Modbus.h:
 ../Core/Inc/temperature_state_machine.h:
 
 ../Core/Inc/minirysboard_state_machine_utils.h:
+
+../Core/Inc/comunication_state_machine.h:
+
+../Core/Inc/voltage_current_state_machine.h:
 
 ../Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
 
