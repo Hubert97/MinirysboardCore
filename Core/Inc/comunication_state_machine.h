@@ -18,6 +18,11 @@ struct CommStateMachineDataType{
 
 };
 
+void CommStateMachineInit(struct CommStateMachineDataType *CSM)
+    {
+    CSM->state = CSM_NONE;
+    }
+
 /**
  * @brief Temperature State Machine runtime decides which perypherials must be shutdown and which are free to be active.
  * More information about PollVector ANd how it work at MSM_Runtime in MinirysboardStateMachine.h

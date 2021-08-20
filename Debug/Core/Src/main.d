@@ -49,8 +49,9 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  ../Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- ../Core/Inc/msm_runtime.h ../Core/Inc/minirysboard_state_machine_utils.h \
- ../Core/Inc/main.h ../Core/Inc/temperature_state_machine.h \
+ ../Core/Inc/msm_runtime.h ../Core/Inc/main.h \
+ ../Core/Inc/minirysboard_state_machine_utils.h \
+ ../Core/Inc/temperature_state_machine.h \
  ../Core/Inc/minirysboard_state_machine_utils.h \
  ../Core/Inc/comunication_state_machine.h \
  ../Core/Inc/voltage_current_state_machine.h \
@@ -162,9 +163,9 @@ C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MODBUS-LIB/Inc/Modbus.h:
 
 ../Core/Inc/msm_runtime.h:
 
-../Core/Inc/minirysboard_state_machine_utils.h:
-
 ../Core/Inc/main.h:
+
+../Core/Inc/minirysboard_state_machine_utils.h:
 
 ../Core/Inc/temperature_state_machine.h:
 

@@ -49,6 +49,8 @@ typedef struct MSM_OutputsDataType
 
     } OutputsDataType;
 
+ enum MSMState {MSM_SHUTDOWN, MSM_INIT, MSM_RUN_STATE, MSM_SLLEP};
+
 
 
     /**
@@ -61,6 +63,7 @@ typedef struct MSM_StateDataType
 	struct MSM_InputsDataType AnalogInputs;
 	uint16_t FanSpeedRPM;
 	uint8_t BoardConfiguration;
+	enum MSMState state;
 	struct MSM_OutputsDataType OutputData;
 
 	// Voting State machies
@@ -161,12 +164,12 @@ void MSM_PreflightCheck(struct MSM_StateDataType  * Robot_State)
     HAL_Delay(10);	//wait for capacitors to charge up
 
 
-    if(!MSM_CheckAnalogSensors(Robot_State))	//board error
+ /*   if(!MSM_CheckAnalogSensors(Robot_State))	//board error
 	{
 	Robot_State->BoardConfiguration = 0;
 	return;
 	}
-
+*/
 
     //Check if harness or batteries are present
     if(1)//todo check 12V line (Batt+)
@@ -192,17 +195,6 @@ void MSM_PreflightCheck(struct MSM_StateDataType  * Robot_State)
     Robot_State->BoardConfiguration = 2;
     return;
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 #endif /* INC_MINIRYSBOARD_STATE_MACHINE_UTILS_H_ */

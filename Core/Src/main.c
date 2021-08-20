@@ -137,7 +137,7 @@ int main(void)
  // ///////////////////////////////////// IO TEST LINE ///////////////////
  // TEST_IO();
  // /////////////////////////////////////Coment to run OS///////////////////
-  MSM_PreflightCheck(&MachineStateData);
+  //MSM_PreflightCheck(&MachineStateData);
 
   modbus_h.uiModbusType = SLAVE_RTU;
   modbus_h.port =  &huart1;
@@ -281,7 +281,7 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.ScanConvMode = ADC_SCAN_SEQ_FIXED;
@@ -552,26 +552,26 @@ void main_logic_setup(void *argument)
 {
   /* USER CODE BEGIN 5 */
    // HAL_TIM_Base_Start(&htim17);
-
+   // MSM_StateInit(&MachineStateData);
   /* Infinite loop */
   for(;;)
   {
+     // MSM_RunStateRuntime(&MachineStateData);
+      //zablokowanie pamieci wspoldzielonej
+    //  xSemaphoreTake(modbus_h.ModBusSphrHandle , 100);
+    //  HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, modbus_h.au16regs[0] & 0x1);
 
-	//zablokowanie pamieci wspoldzielonej
-	xSemaphoreTake(modbus_h.ModBusSphrHandle , 100);
-	HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, modbus_h.au16regs[0] & 0x1);
+      //synchronizacja danych
+   //   ModbusDATA[1]=MachineStateData.FanSpeedRPM;
+   ///   MSM_DataCopy(&ModbusDATA[2],&MachineStateData.AnalogInputs.ADCInput[0],12);
 
-	//synchronizacja danych
-	ModbusDATA[1]=MachineStateData.FanSpeedRPM;
-	MSM_DataCopy(&ModbusDATA[2],&MachineStateData.AnalogInputs.ADCInput[0],12);
-
-	xSemaphoreGive(modbus_h.ModBusSphrHandle);
+//      xSemaphoreGive(modbus_h.ModBusSphrHandle);
 	//odblokowanie pamieci wspoldzielonej
 
-	uint32_t TmpFanSPeed=__HAL_TIM_GetCounter(&htim17);
-	htim17.Instance->CNT=0;
-	MachineStateData.FanSpeedRPM=TmpFanSPeed*300;
-	osDelay(200);
+      uint32_t TmpFanSPeed=__HAL_TIM_GetCounter(&htim17);
+      htim17.Instance->CNT=0;
+      MachineStateData.FanSpeedRPM=TmpFanSPeed*300;
+      osDelay(2);
 
   }
   /* USER CODE END 5 */
@@ -599,7 +599,7 @@ void modbus_init_task(void *argument)
   /* USER CODE END modbus_init_task */
 }
 
- /**
+/**
   * @brief  Period elapsed callback in non blocking mode
   * @note   This function is called  when TIM1 interrupt took place, inside
   * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment

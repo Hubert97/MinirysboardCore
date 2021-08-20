@@ -18,6 +18,11 @@ struct VCtateMachineDataType{
 
 };
 
+void VCStateMachineInit(struct VCtateMachineDataType *VCSM)
+    {
+    VCSM->state = VCSM_ALL_OFF;
+    }
+
 /**
  * @brief Temperature State Machine runtime decides which perypherials must be shutdown and which are free to be active.
  *
@@ -43,10 +48,6 @@ void VCSM_Runtime(struct VCtateMachineDataType *VCSM, analog_data *analog_inputs
     switch(VCSM->state)
 	{
     case VCSM_ALL_OFF:
-	if(1)
-	    {
-
-	    }
 	*PollVector = *PollVector & 0x81; // mask is 1000 0001 which means all non 3.3V efectors are forbidden
 	break;
     case VCSM_MAIN_12V_ON:

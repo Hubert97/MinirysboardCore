@@ -7,6 +7,7 @@
 
 #ifndef INC_MSM_RUNTIME_H_
 #define INC_MSM_RUNTIME_H_
+#include "main.h"
 #include "minirysboard_state_machine_utils.h"
 #include "temperature_state_machine.h"
 #include "comunication_state_machine.h"
@@ -15,6 +16,14 @@
 struct TStateMachineDataType TSM;
 struct CommStateMachineDataType CM;
 struct VCtateMachineDataType VCM;
+
+
+void MSM_StateInit(struct MSM_StateDataType *MSM)
+    {
+    MSM->state = MSM_RUN_STATE;
+    }
+
+
 
 /**
  * @brief Main of this task is to manage state machines and wight their outputs
@@ -73,10 +82,9 @@ struct VCtateMachineDataType VCM;
  *
  *
  */
-
-
-void MSM_Runtime(struct MSM_StateDataType  * Robot_State)
+void MSM_RunStateRuntime(struct MSM_StateDataType  * Robot_State)
     {
+
     static uint8_t PollVector;
 
     MSM_CheckAnalogSensors(Robot_State);
@@ -85,8 +93,9 @@ void MSM_Runtime(struct MSM_StateDataType  * Robot_State)
     case 0:
 	break;
     case 1:
-	PollVector=0x89;// todo set execution vector to max allowed config
+	PollVector=0x89;//  set execution vector to max allowed config
 	CommSM_Runtime(&CM, ModbusDATA, &PollVector);//run comms state machine
+	VCSM_Runtime(&VCM, ModbusDATA, &PollVector, &PollVector);
 	// todo run voltage/current state machine
 	break;
     case 2:
@@ -106,6 +115,57 @@ void MSM_Runtime(struct MSM_StateDataType  * Robot_State)
     // todo execute state
     // todo assert error table
     // todo assert data from RPI4
+
+    }
+
+/**
+ * @brief This is main runtime it must be placed in the while loop
+ * it is the highest state machine and decides in what state the main board is.
+ * Robot can be shutdown - only powerbutton starts is
+ * it governs that before runtime we asses board state
+ * it waits for time to pass to go out of sleep state.
+ *
+ *
+ */
+
+
+void MSM_Runtime(struct MSM_StateDataType  * Robot_State)
+    {
+
+    static int Timer;
+    switch(Robot_State->state)
+	{
+    case MSM_SHUTDOWN:
+	//todo better debouce
+	if(!HAL_GPIO_ReadPin(Power_Switch_GPIO_Port, Power_Switch_Pin))
+	    {
+	   osDelay(10);
+	    if(!HAL_GPIO_ReadPin(Power_Switch_GPIO_Port, Power_Switch_Pin))
+		{
+		Robot_State->state = MSM_INIT;
+		}
+	    }
+	break;
+    case MSM_INIT:
+	//MSM_PreflightCheck(Robot_State);
+	//runs once init all state machines.
+
+	Robot_State->state = MSM_RUN_STATE;
+	break;
+    case MSM_RUN_STATE:
+	if(Timer >100000)
+	    {
+	    HAL_GPIO_TogglePin(LED_G_GPIO_Port, LED_B_Pin);
+	    Timer = 0;
+	    }
+	//MSM_RunStateRuntime(Robot_State);
+	break;
+    case MSM_SLLEP:
+	break;
+    }
+    Timer++;
+    // RUN STATE Start
+
     }
 
 

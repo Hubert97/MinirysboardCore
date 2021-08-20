@@ -22,6 +22,11 @@ struct TStateMachineDataType{
 
 };
 
+void TStateMachineInit(struct TStateMachineDataType *TSM)
+    {
+    TSM->state = TSM_MAX_FAN;
+    }
+
 /**
  * @brief Temperature State Machine runtime decides which peripherals must be shutdown and which are free to be active.
  * More information about PollVector ANd how it work at MSM_Runtime in MinirysboardStateMachine.h
