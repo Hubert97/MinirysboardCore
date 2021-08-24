@@ -9,10 +9,10 @@
   * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                             www.st.com/SLA0044
   *
   ******************************************************************************
   */
@@ -23,11 +23,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "msm_runtime.h"
-#include <minirysboard_state_machine_utils.h>
 #include "Modbus.h"
 #include "semphr.h"
-#include "IO_check.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,12 +39,8 @@ typedef StaticTask_t osStaticThreadDef_t;
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
 modbusHandler_t modbus_h;
-uint16_t ModbusDATA[18];
-
-struct MSM_StateDataType MachineStateData;
-
+uint16_t ModbusDATA[16];
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -68,7 +61,7 @@ const osThreadAttr_t main_logic_loop_attributes = {
   .stack_size = sizeof(main_logic_loopBuffer),
   .cb_mem = &main_logic_loopControlBlock,
   .cb_size = sizeof(main_logic_loopControlBlock),
-  .priority = (osPriority_t) osPriorityRealtime,
+  .priority = (osPriority_t) osPriorityNormal,
 };
 /* USER CODE BEGIN PV */
 
@@ -78,10 +71,10 @@ const osThreadAttr_t main_logic_loop_attributes = {
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM17_Init(void);
-void main_logic_setup(void *argument);
+static void MX_USART1_UART_Init(void);
+void start_main_logic_loop(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -121,38 +114,25 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_USART1_UART_Init();
   MX_ADC1_Init();
   MX_TIM17_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-
-
-
-
-
-
-
- // ///////////////////////////////////// IO TEST LINE ///////////////////
- // TEST_IO();
- // /////////////////////////////////////Coment to run OS///////////////////
-  MSM_PreflightCheck(&MachineStateData);
-
-  modbus_h.uiModbusType = SLAVE_RTU;
+  modbus_h.uModbusType = MB_SLAVE;
   modbus_h.port =  &huart1;
   modbus_h.u8id = 10; //Modbus slave ID
   modbus_h.u16timeOut = 1000;
   modbus_h.EN_Port = NULL;
-  modbus_h.u32overTime = 0;
-  modbus_h.au16regs = ModbusDATA;
+  modbus_h.u16regs = ModbusDATA;
   modbus_h.u16regsize = sizeof(ModbusDATA)/sizeof(ModbusDATA[0]);
 
+
   ModbusInit(&modbus_h);
+
   ModbusStart(&modbus_h);
 
-  HAL_ADC_Start_DMA(&hadc1,&MachineStateData.AnalogInputs.ADCInput[0] ,12);
-  HAL_ADC_Start(&hadc1);
-
-
+//   HAL_ADC_Start_DMA(&hadc1,&MachineStateData.AnalogInputs.ADC_Input[0] ,12);
+   HAL_ADC_Start(&hadc1);
 
   /* USER CODE END 2 */
 
@@ -177,7 +157,7 @@ int main(void)
 
   /* Create the thread(s) */
   /* creation of main_logic_loop */
-  main_logic_loopHandle = osThreadNew(main_logic_setup, NULL, &main_logic_loop_attributes);
+  main_logic_loopHandle = osThreadNew(start_main_logic_loop, NULL, &main_logic_loop_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -276,13 +256,13 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV16;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV2;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.ScanConvMode = ADC_SCAN_SEQ_FIXED;
   hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
-  hadc1.Init.LowPowerAutoWait = ENABLE;
-  hadc1.Init.LowPowerAutoPowerOff = ENABLE;
+  hadc1.Init.LowPowerAutoWait = DISABLE;
+  hadc1.Init.LowPowerAutoPowerOff = DISABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
@@ -364,13 +344,6 @@ static void MX_ADC1_Init(void)
   /** Configure Regular Channel
   */
   sConfig.Channel = ADC_CHANNEL_16;
-  if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure Regular Channel
-  */
-  sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
   if (HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
   {
     Error_Handler();
@@ -504,7 +477,7 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin : Power_Switch_Pin */
   GPIO_InitStruct.Pin = Power_Switch_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(Power_Switch_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_B_Pin ENABLE_STEPPER_MOTORS_Pin ENABLE_TOFS_Pin PWM_FAN_Pin
@@ -536,42 +509,35 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE END 4 */
 
-/* USER CODE BEGIN Header_main_logic_setup */
+/* USER CODE BEGIN Header_start_main_logic_loop */
 /**
   * @brief  Function implementing the main_logic_loop thread.
   * @param  argument: Not used
   * @retval None
   */
-/* USER CODE END Header_main_logic_setup */
-void main_logic_setup(void *argument)
+/* USER CODE END Header_start_main_logic_loop */
+void start_main_logic_loop(void *argument)
 {
   /* USER CODE BEGIN 5 */
-    HAL_TIM_Base_Start(&htim17);
-    MSM_StateInit(&MachineStateData);
   /* Infinite loop */
   for(;;)
   {
 
+		//zablokowanie pamieci wspoldzielonej
+		xSemaphoreTake(modbus_h.ModBusSphrHandle , 100);
+		HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, modbus_h.au16regs[0] & 0x1);
 
-      MSM_RunStateRuntime(&MachineStateData);
-      //zablokowanie pamieci wspoldzielonej
-      xSemaphoreTake(modbus_h.ModBusSphrHandle , 100);
-      HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, modbus_h.au16regs[0] & 0x1);
+		//synchronizacja danych
+		ModbusDATA[1]=MachineStateData.FanSpeedRPM;
+		MSM_DataCopy(&ModbusDATA[2],&MachineStateData.AnalogInputs.ADCInput[0],12);
 
-      //synchronizacja danych
-      ModbusDATA[1]=MachineStateData.FanSpeedRPM;
-      MSM_DataCopy(&ModbusDATA[2],&MachineStateData.AnalogInputs.ADCInput[0],12);
+		xSemaphoreGive(modbus_h.ModBusSphrHandle);
+		//odblokowanie pamieci wspoldzielonej
 
-      xSemaphoreGive(modbus_h.ModBusSphrHandle);
-	//odblokowanie pamieci wspoldzielonej
-
-
-      HAL_GPIO_TogglePin(LED_R_GPIO_Port, LED_R_Pin);
-      uint32_t TmpFanSPeed=__HAL_TIM_GetCounter(&htim17);
-      htim17.Instance->CNT=0;
-      MachineStateData.FanSpeedRPM=TmpFanSPeed*300;
-      osDelay(20);
-
+		uint32_t TmpFanSPeed=__HAL_TIM_GetCounter(&htim17);
+		htim17.Instance->CNT=0;
+		MachineStateData.FanSpeedRPM=TmpFanSPeed*300;
+		osDelay(200);
   }
   /* USER CODE END 5 */
 }
