@@ -542,7 +542,7 @@ void start_main_logic_loop(void *argument)
 		htim17.Instance->CNT=0;
 		MachineStateData.FanSpeedRPM=TmpFanSPeed*300;
 		HAL_GPIO_ReadPin(LED_G_GPIO_Port, LED_G_Pin);
-		osDelay(200);
+		osDelay(100);
   }
   /* USER CODE END 5 */
 }
