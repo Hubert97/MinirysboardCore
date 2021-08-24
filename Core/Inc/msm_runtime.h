@@ -153,7 +153,7 @@ void MSM_Runtime(struct MSM_StateDataType  * Robot_State)
 	Robot_State->state = MSM_RUN_STATE;
 	break;
     case MSM_RUN_STATE:
-	if(Timer >100000)
+	if(Timer >1000)
 	    {
 	    HAL_GPIO_TogglePin(LED_G_GPIO_Port, LED_B_Pin);
 	    Timer = 0;

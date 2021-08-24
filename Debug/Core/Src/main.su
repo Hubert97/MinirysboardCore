@@ -1,8 +1,7 @@
-main.c:587:6:modbus_init_task	8	static
 temperature_state_machine.h:25:6:TStateMachineInit	0	static
 temperature_state_machine.h:58:6:TSM_Runtime	0	static
 minirysboard_state_machine_utils.h:86:6:MSM_DataCopy	8	static
-main.c:551:6:main_logic_setup	16	static
+main.c:546:6:main_logic_setup	24	static
 minirysboard_state_machine_utils.h:99:5:MSM_CheckAnalogSensors	0	static
 minirysboard_state_machine_utils.h:109:6:MSM_EmergencyShutdown	16	static
 minirysboard_state_machine_utils.h:122:6:MSM_Normal_Shutdown	16	static
@@ -16,7 +15,7 @@ msm_runtime.h:85:6:MSM_RunStateRuntime	16	static
 msm_runtime.h:132:6:MSM_Runtime	16	static
 IO_check.h:15:6:TEST_IO	16	static
 IO_check.h:92:6:Analog_Only	24	static
-main.c:214:6:SystemClock_Config	128	static,ignoring_inline_asm
-main.c:101:5:main	64	static,ignoring_inline_asm
-main.c:610:6:HAL_TIM_PeriodElapsedCallback	8	static
-main.c:627:6:Error_Handler	0	static,ignoring_inline_asm
+main.c:209:6:SystemClock_Config	120	static,ignoring_inline_asm
+main.c:99:5:main	64	static,ignoring_inline_asm
+main.c:587:6:HAL_TIM_PeriodElapsedCallback	8	static
+main.c:604:6:Error_Handler	0	static,ignoring_inline_asm

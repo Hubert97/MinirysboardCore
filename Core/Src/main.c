@@ -31,6 +31,7 @@
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
+typedef StaticTask_t osStaticThreadDef_t;
 /* USER CODE BEGIN PTD */
 
 /* USER CODE END PTD */
@@ -59,17 +60,15 @@ UART_HandleTypeDef huart1;
 
 /* Definitions for main_logic_loop */
 osThreadId_t main_logic_loopHandle;
+uint32_t main_logic_loopBuffer[ 128 ];
+osStaticThreadDef_t main_logic_loopControlBlock;
 const osThreadAttr_t main_logic_loop_attributes = {
   .name = "main_logic_loop",
-  .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 128 * 4
-};
-/* Definitions for Modbus_Task */
-osThreadId_t Modbus_TaskHandle;
-const osThreadAttr_t Modbus_Task_attributes = {
-  .name = "Modbus_Task",
-  .priority = (osPriority_t) osPriorityLow,
-  .stack_size = 128 * 4
+  .stack_mem = &main_logic_loopBuffer[0],
+  .stack_size = sizeof(main_logic_loopBuffer),
+  .cb_mem = &main_logic_loopControlBlock,
+  .cb_size = sizeof(main_logic_loopControlBlock),
+  .priority = (osPriority_t) osPriorityRealtime,
 };
 /* USER CODE BEGIN PV */
 
@@ -83,7 +82,6 @@ static void MX_USART1_UART_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_TIM17_Init(void);
 void main_logic_setup(void *argument);
-void modbus_init_task(void *argument);
 
 /* USER CODE BEGIN PFP */
 
@@ -137,7 +135,7 @@ int main(void)
  // ///////////////////////////////////// IO TEST LINE ///////////////////
  // TEST_IO();
  // /////////////////////////////////////Coment to run OS///////////////////
-  //MSM_PreflightCheck(&MachineStateData);
+  MSM_PreflightCheck(&MachineStateData);
 
   modbus_h.uiModbusType = SLAVE_RTU;
   modbus_h.port =  &huart1;
@@ -180,9 +178,6 @@ int main(void)
   /* Create the thread(s) */
   /* creation of main_logic_loop */
   main_logic_loopHandle = osThreadNew(main_logic_setup, NULL, &main_logic_loop_attributes);
-
-  /* creation of Modbus_Task */
-  Modbus_TaskHandle = osThreadNew(modbus_init_task, NULL, &Modbus_Task_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -229,11 +224,11 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV2;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV1;
   RCC_OscInitStruct.PLL.PLLN = 8;
   RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
-  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV8;
+  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -246,7 +241,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -281,7 +276,7 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV16;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.ScanConvMode = ADC_SCAN_SEQ_FIXED;
@@ -295,7 +290,7 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_19CYCLES_5;
+  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_160CYCLES_5;
   hadc1.Init.OversamplingMode = DISABLE;
   hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_LOW;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
@@ -551,52 +546,34 @@ static void MX_GPIO_Init(void)
 void main_logic_setup(void *argument)
 {
   /* USER CODE BEGIN 5 */
-   // HAL_TIM_Base_Start(&htim17);
-   // MSM_StateInit(&MachineStateData);
+    HAL_TIM_Base_Start(&htim17);
+    MSM_StateInit(&MachineStateData);
   /* Infinite loop */
   for(;;)
   {
-     // MSM_RunStateRuntime(&MachineStateData);
+
+
+      MSM_RunStateRuntime(&MachineStateData);
       //zablokowanie pamieci wspoldzielonej
-    //  xSemaphoreTake(modbus_h.ModBusSphrHandle , 100);
-    //  HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, modbus_h.au16regs[0] & 0x1);
+      xSemaphoreTake(modbus_h.ModBusSphrHandle , 100);
+      HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, modbus_h.au16regs[0] & 0x1);
 
       //synchronizacja danych
-   //   ModbusDATA[1]=MachineStateData.FanSpeedRPM;
-   ///   MSM_DataCopy(&ModbusDATA[2],&MachineStateData.AnalogInputs.ADCInput[0],12);
+      ModbusDATA[1]=MachineStateData.FanSpeedRPM;
+      MSM_DataCopy(&ModbusDATA[2],&MachineStateData.AnalogInputs.ADCInput[0],12);
 
-//      xSemaphoreGive(modbus_h.ModBusSphrHandle);
+      xSemaphoreGive(modbus_h.ModBusSphrHandle);
 	//odblokowanie pamieci wspoldzielonej
 
+
+      HAL_GPIO_TogglePin(LED_R_GPIO_Port, LED_R_Pin);
       uint32_t TmpFanSPeed=__HAL_TIM_GetCounter(&htim17);
       htim17.Instance->CNT=0;
       MachineStateData.FanSpeedRPM=TmpFanSPeed*300;
-      osDelay(2);
+      osDelay(20);
 
   }
   /* USER CODE END 5 */
-}
-
-/* USER CODE BEGIN Header_modbus_init_task */
-/**
-* @brief Function implementing the Modbus_Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_modbus_init_task */
-void modbus_init_task(void *argument)
-{
-  /* USER CODE BEGIN modbus_init_task */
-
-  /* Infinite loop */
-  for(;;)
-  {
-
-      //HAL_GPIO_TogglePin(LED_B_GPIO_Port,LED_B_Pin);
-
-      osDelay(2000);
-  }
-  /* USER CODE END modbus_init_task */
 }
 
 /**
