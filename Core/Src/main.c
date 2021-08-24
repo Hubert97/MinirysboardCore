@@ -25,6 +25,8 @@
 /* USER CODE BEGIN Includes */
 #include "Modbus.h"
 #include "semphr.h"
+#include "minirysboard_state_machine_utils.h"
+#include "msm_runtime.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,6 +43,8 @@ typedef StaticTask_t osStaticThreadDef_t;
 /* USER CODE BEGIN PM */
 modbusHandler_t modbus_h;
 uint16_t ModbusDATA[16];
+
+struct MSM_StateDataType MachineStateData;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -525,7 +529,7 @@ void start_main_logic_loop(void *argument)
 
 		//zablokowanie pamieci wspoldzielonej
 		xSemaphoreTake(modbus_h.ModBusSphrHandle , 100);
-		HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, modbus_h.au16regs[0] & 0x1);
+		HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, modbus_h.u16regs[0] & 0x1);
 
 		//synchronizacja danych
 		ModbusDATA[1]=MachineStateData.FanSpeedRPM;
@@ -537,6 +541,7 @@ void start_main_logic_loop(void *argument)
 		uint32_t TmpFanSPeed=__HAL_TIM_GetCounter(&htim17);
 		htim17.Instance->CNT=0;
 		MachineStateData.FanSpeedRPM=TmpFanSPeed*300;
+		HAL_GPIO_ReadPin(LED_G_GPIO_Port, LED_G_Pin);
 		osDelay(200);
   }
   /* USER CODE END 5 */

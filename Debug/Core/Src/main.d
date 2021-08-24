@@ -51,7 +51,12 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/queue.h
+ C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
+ ../Core/Inc/minirysboard_state_machine_utils.h ../Core/Inc/main.h \
+ ../Core/Inc/temperature_state_machine.h ../Core/Inc/msm_runtime.h \
+ ../Core/Inc/minirysboard_state_machine_utils.h \
+ ../Core/Inc/comunication_state_machine.h \
+ ../Core/Inc/voltage_current_state_machine.h
 
 ../Core/Inc/main.h:
 
@@ -160,3 +165,17 @@ C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Par
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
 
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
+
+../Core/Inc/minirysboard_state_machine_utils.h:
+
+../Core/Inc/main.h:
+
+../Core/Inc/temperature_state_machine.h:
+
+../Core/Inc/msm_runtime.h:
+
+../Core/Inc/minirysboard_state_machine_utils.h:
+
+../Core/Inc/comunication_state_machine.h:
+
+../Core/Inc/voltage_current_state_machine.h:
