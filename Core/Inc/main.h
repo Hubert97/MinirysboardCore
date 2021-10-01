@@ -32,13 +32,12 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "Modbus.h"
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-extern modbusHandler_t modbus_h;
-extern uint16_t ModbusDATA[16];
+
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -59,8 +58,6 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define VOLTAGE_PROBE_20V_Pin GPIO_PIN_0
-#define VOLTAGE_PROBE_20V_GPIO_Port GPIOA
 #define VOLTAGE_PROBE_5V_Pin GPIO_PIN_1
 #define VOLTAGE_PROBE_5V_GPIO_Port GPIOA
 #define CHASIS_T_1_Pin GPIO_PIN_2
@@ -71,8 +68,8 @@ void Error_Handler(void);
 #define BOARD_TEMP_PROBE1_GPIO_Port GPIOA
 #define BOARD_TEMP_PROBE2_Pin GPIO_PIN_5
 #define BOARD_TEMP_PROBE2_GPIO_Port GPIOA
-#define Power_Switch_Pin GPIO_PIN_6
-#define Power_Switch_GPIO_Port GPIOA
+#define POWER_SWITCH_Pin GPIO_PIN_6
+#define POWER_SWITCH_GPIO_Port GPIOA
 #define VBAT_1_Pin GPIO_PIN_7
 #define VBAT_1_GPIO_Port GPIOA
 #define VBAT_2_Pin GPIO_PIN_0
@@ -85,8 +82,6 @@ void Error_Handler(void);
 #define LED_R_GPIO_Port GPIOA
 #define LED_G_Pin GPIO_PIN_6
 #define LED_G_GPIO_Port GPIOC
-#define BAT_CURRENT_Pin GPIO_PIN_12
-#define BAT_CURRENT_GPIO_Port GPIOA
 #define ENABLE_SENSORS_Pin GPIO_PIN_15
 #define ENABLE_SENSORS_GPIO_Port GPIOA
 #define ENABLE_STEPPER_MOTORS_Pin GPIO_PIN_3
