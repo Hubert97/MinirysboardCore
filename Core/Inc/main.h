@@ -32,13 +32,16 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "Modbus.h"
+
+extern UART_HandleTypeDef huart1;
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-extern modbusHandler_t modbus_h;
-extern uint16_t ModbusDATA[16];
+
+extern uint16_t ModbusDATA[32];
+extern struct MSM_StateDataType MachineStateData;
+extern struct FAN_InterfaceS Fan_Handler;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -71,8 +74,8 @@ void Error_Handler(void);
 #define BOARD_TEMP_PROBE1_GPIO_Port GPIOA
 #define BOARD_TEMP_PROBE2_Pin GPIO_PIN_5
 #define BOARD_TEMP_PROBE2_GPIO_Port GPIOA
-#define Power_Switch_Pin GPIO_PIN_6
-#define Power_Switch_GPIO_Port GPIOA
+#define POWER_SWITCH_Pin GPIO_PIN_6
+#define POWER_SWITCH_GPIO_Port GPIOA
 #define VBAT_1_Pin GPIO_PIN_7
 #define VBAT_1_GPIO_Port GPIOA
 #define VBAT_2_Pin GPIO_PIN_0

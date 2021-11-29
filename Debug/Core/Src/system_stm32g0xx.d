@@ -1,6 +1,6 @@
 Core/Src/system_stm32g0xx.o: ../Core/Src/system_stm32g0xx.c \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g041xx.h \
+ C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g071xx.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Include/core_cm0plus.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Include/cmsis_version.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Include/cmsis_compiler.h \
@@ -30,14 +30,12 @@ Core/Src/system_stm32g0xx.o: ../Core/Src/system_stm32g0xx.c \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash_ex.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h
 
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h:
 
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g041xx.h:
+C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g071xx.h:
 
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Include/core_cm0plus.h:
 
@@ -96,10 +94,6 @@ C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr.h:
 
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h:
 
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h:
 
