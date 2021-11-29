@@ -4,7 +4,7 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_rcc.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_def.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g041xx.h \
+ C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g071xx.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Include/core_cm0plus.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Include/cmsis_version.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Include/cmsis_compiler.h \
@@ -30,33 +30,14 @@ Core/Src/main.o: ../Core/Src/main.c ../Core/Inc/main.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_flash_ex.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h \
  C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h \
- C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MODBUS-LIB/Inc/Modbus.h \
- ../Core/Inc/ModbusConfig.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h \
- ../Core/Inc/FreeRTOSConfig.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/portable.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM0/portmacro.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/timers.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
- C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
- ../Core/Inc/minirysboard_state_machine_utils.h ../Core/Inc/main.h \
- ../Core/Inc/temperature_state_machine.h ../Core/Inc/msm_runtime.h \
- ../Core/Inc/minirysboard_state_machine_utils.h \
- ../Core/Inc/comunication_state_machine.h \
- ../Core/Inc/voltage_current_state_machine.h
+ C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/minirysboard_state_machine_utils.h \
+ C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/temperature_state_machine.h \
+ C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/msm_runtime.h \
+ C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/minirysboard_state_machine_utils.h \
+ C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/comunication_state_machine.h \
+ C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/voltage_current_state_machine.h
 
 ../Core/Inc/main.h:
 
@@ -70,7 +51,7 @@ C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL
 
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g0xx.h:
 
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g041xx.h:
+C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Device/ST/STM32G0xx/Include/stm32g071xx.h:
 
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/CMSIS/Include/core_cm0plus.h:
 
@@ -122,60 +103,18 @@ C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL
 
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_pwr_ex.h:
 
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_tim_ex.h:
-
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart.h:
 
 C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Drivers/STM32G0xx_HAL_Driver/Inc/stm32g0xx_hal_uart_ex.h:
 
-C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MODBUS-LIB/Inc/Modbus.h:
+C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/minirysboard_state_machine_utils.h:
 
-../Core/Inc/ModbusConfig.h:
+C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/temperature_state_machine.h:
 
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h:
+C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/msm_runtime.h:
 
-../Core/Inc/FreeRTOSConfig.h:
+C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/minirysboard_state_machine_utils.h:
 
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h:
+C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/comunication_state_machine.h:
 
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/portable.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/deprecated_definitions.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM0/portmacro.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/mpu_wrappers.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/list.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/timers.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
-
-C:/Users/huber/STM32Cube/Repository/STM32Cube_FW_G0_V1.5.0/Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
-
-../Core/Inc/minirysboard_state_machine_utils.h:
-
-../Core/Inc/main.h:
-
-../Core/Inc/temperature_state_machine.h:
-
-../Core/Inc/msm_runtime.h:
-
-../Core/Inc/minirysboard_state_machine_utils.h:
-
-../Core/Inc/comunication_state_machine.h:
-
-../Core/Inc/voltage_current_state_machine.h:
+C:/Users/huber/STM32CubeIDE/workspace_1.6.1/MINIRYS-LIB/Inc/voltage_current_state_machine.h:
