@@ -10,10 +10,10 @@
   * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                             www.st.com/SLA0044
   *
   ******************************************************************************
   */
@@ -32,13 +32,15 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "Modbus.h"
+
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-extern modbusHandler_t modbus_h;
-extern uint16_t ModbusDATA[18];
+extern UART_HandleTypeDef huart1;
+extern uint16_t ModbusDATA[16];
+extern struct MSM_StateDataType MachineStateData;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
@@ -71,8 +73,8 @@ void Error_Handler(void);
 #define BOARD_TEMP_PROBE1_GPIO_Port GPIOA
 #define BOARD_TEMP_PROBE2_Pin GPIO_PIN_5
 #define BOARD_TEMP_PROBE2_GPIO_Port GPIOA
-#define Power_Switch_Pin GPIO_PIN_6
-#define Power_Switch_GPIO_Port GPIOA
+#define POWER_SWITCH_Pin GPIO_PIN_6
+#define POWER_SWITCH_GPIO_Port GPIOA
 #define VBAT_1_Pin GPIO_PIN_7
 #define VBAT_1_GPIO_Port GPIOA
 #define VBAT_2_Pin GPIO_PIN_0

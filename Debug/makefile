@@ -9,12 +9,7 @@ RM := rm -rf
 
 # All of the sources participating in the build are defined here
 -include sources.mk
--include Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/subdir.mk
--include Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM0/subdir.mk
--include Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/subdir.mk
--include Middlewares/Third_Party/FreeRTOS/Source/subdir.mk
--include MODBUS-LIB/Src/subdir.mk
--include Drivers/STM32G0xx_HAL_Driver/Src/subdir.mk
+-include Drivers/STM32G0xx_HAL_Driver/subdir.mk
 -include Core/Startup/subdir.mk
 -include Core/Src/subdir.mk
 -include subdir.mk
@@ -66,8 +61,8 @@ all: main-build
 main-build: Minirys_RTOS.elf secondary-outputs
 
 # Tool invocations
-Minirys_RTOS.elf: $(OBJS) $(USER_OBJS) C:\Users\huber\STM32CubeIDE\workspace_1.6.1\Minirys_RTOS\STM32G031K6UX_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "Minirys_RTOS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus -T"C:\Users\huber\STM32CubeIDE\workspace_1.6.1\Minirys_RTOS\STM32G031K6UX_FLASH.ld" --specs=nosys.specs -Wl,-Map="Minirys_RTOS.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+Minirys_RTOS.elf: $(OBJS) $(USER_OBJS) fail-specified-linker-script-missing makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "Minirys_RTOS.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m0plus --specs=nosys.specs -Wl,-Map="Minirys_RTOS.map" -Wl,--gc-sections -static --specs=nano.specs -mfloat-abi=soft -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 

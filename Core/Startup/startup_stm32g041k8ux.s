@@ -1,8 +1,8 @@
 /**
   ******************************************************************************
-  * @file      startup_stm32g031xx.s
+  * @file      startup_stm32g041xx.s
   * @author    MCD Application Team
-  * @brief     STM32G031xx devices vector table GCC toolchain.
+  * @brief     STM32G041xx devices vector table GCC toolchain.
   *            This module performs:
   *                - Set the initial SP
   *                - Set the initial PC == Reset_Handler,
@@ -14,12 +14,12 @@
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2019 STMicroelectronics. All rights reserved.
+  * Copyright (c) 2018-2021 STMicroelectronics.
+  * All rights reserved.
   *
-  * This software component is licensed by ST under Apache License, Version 2.0,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/Apache-2.0
+  * This software is licensed under terms that can be found in the LICENSE file
+  * in the root directory of this software component.
+  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -177,6 +177,7 @@ g_pfnVectors:
   .word USART2_IRQHandler                 /* USART2                       */
   .word LPUART1_IRQHandler                /* LPUART1                      */
   .word 0                                 /* reserved                     */
+  .word AES_RNG_IRQHandler                /* AES and RNG                  */
 
 /*******************************************************************************
 *
@@ -284,6 +285,9 @@ g_pfnVectors:
 
   .weak      LPUART1_IRQHandler
   .thumb_set LPUART1_IRQHandler,Default_Handler
+
+  .weak      AES_RNG_IRQHandler
+  .thumb_set AES_RNG_IRQHandler,Default_Handler
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 

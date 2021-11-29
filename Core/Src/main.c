@@ -9,25 +9,23 @@
   * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
+  * This software component is licensed by ST under Ultimate Liberty license
+  * SLA0044, the "License"; You may not use this file except in compliance with
+  * the License. You may obtain a copy of the License at:
+  *                             www.st.com/SLA0044
   *
   ******************************************************************************
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "cmsis_os.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "minirysboard_state_machine_utils.h"
 #include "msm_runtime.h"
-#include <minirysboard_state_machine_utils.h>
-#include "Modbus.h"
-#include "semphr.h"
 #include "IO_check.h"
+#include "comms_handler.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -42,36 +40,31 @@
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
-modbusHandler_t modbus_h;
-uint16_t ModbusDATA[18];
+uint16_t ModbusDATA[16];
 
 struct MSM_StateDataType MachineStateData;
-
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
 DMA_HandleTypeDef hdma_adc1;
 
-TIM_HandleTypeDef htim17;
-
 UART_HandleTypeDef huart1;
 
-/* Definitions for main_logic_loop */
-osThreadId_t main_logic_loopHandle;
-const osThreadAttr_t main_logic_loop_attributes = {
-  .name = "main_logic_loop",
-  .priority = (osPriority_t) osPriorityNormal,
-  .stack_size = 128 * 4
-};
-/* Definitions for Modbus_Task */
-osThreadId_t Modbus_TaskHandle;
-const osThreadAttr_t Modbus_Task_attributes = {
-  .name = "Modbus_Task",
-  .priority = (osPriority_t) osPriorityLow,
-  .stack_size = 128 * 4
-};
 /* USER CODE BEGIN PV */
+uint8_t data;
+struct COM_State serial;
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	/* Modbus RTU TX callback BEGIN */
+	COM_RX_Handler(&serial,data);
+	HAL_UART_Receive_IT(&huart1, &data, 1);
+}
+
+
+
+
+
 
 /* USER CODE END PV */
 
@@ -79,12 +72,8 @@ const osThreadAttr_t Modbus_Task_attributes = {
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_DMA_Init(void);
-static void MX_USART1_UART_Init(void);
 static void MX_ADC1_Init(void);
-static void MX_TIM17_Init(void);
-void main_logic_setup(void *argument);
-void modbus_init_task(void *argument);
-
+static void MX_USART1_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -123,79 +112,24 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_DMA_Init();
-  MX_USART1_UART_Init();
   MX_ADC1_Init();
-  MX_TIM17_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  COM_State_Init(&serial);
+  HAL_UART_Receive_IT(&huart1, &data, 1);
 
 
+   HAL_ADC_Start_DMA(&hadc1,(uint32_t *) MachineStateData.AnalogInputs.ADCInput ,11);
+   HAL_ADC_Start(&hadc1);
+   MSM_StateInit(&MachineStateData);
 
-
-
-
-
- // ///////////////////////////////////// IO TEST LINE ///////////////////
- // TEST_IO();
- // /////////////////////////////////////Coment to run OS///////////////////
-  //MSM_PreflightCheck(&MachineStateData);
-
-  modbus_h.uiModbusType = SLAVE_RTU;
-  modbus_h.port =  &huart1;
-  modbus_h.u8id = 10; //Modbus slave ID
-  modbus_h.u16timeOut = 1000;
-  modbus_h.EN_Port = NULL;
-  modbus_h.u32overTime = 0;
-  modbus_h.au16regs = ModbusDATA;
-  modbus_h.u16regsize = sizeof(ModbusDATA)/sizeof(ModbusDATA[0]);
-
-  ModbusInit(&modbus_h);
-  ModbusStart(&modbus_h);
-
-  HAL_ADC_Start_DMA(&hadc1,&MachineStateData.AnalogInputs.ADCInput[0] ,12);
-  HAL_ADC_Start(&hadc1);
-
-
-
+/*
+   const char message[] = "Self Test Starting\r\n";
+   const char message2[] = "Ok\r\n";
+   HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
+   */
   /* USER CODE END 2 */
 
-  /* Init scheduler */
-  osKernelInitialize();
-
-  /* USER CODE BEGIN RTOS_MUTEX */
-  /* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
-
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
-  /* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
-
-  /* USER CODE BEGIN RTOS_TIMERS */
-  /* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
-
-  /* USER CODE BEGIN RTOS_QUEUES */
-  /* add queues, ... */
-  /* USER CODE END RTOS_QUEUES */
-
-  /* Create the thread(s) */
-  /* creation of main_logic_loop */
-  main_logic_loopHandle = osThreadNew(main_logic_setup, NULL, &main_logic_loop_attributes);
-
-  /* creation of Modbus_Task */
-  Modbus_TaskHandle = osThreadNew(modbus_init_task, NULL, &Modbus_Task_attributes);
-
-  /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
-  /* USER CODE END RTOS_THREADS */
-
-  /* USER CODE BEGIN RTOS_EVENTS */
-  /* add events, ... */
-  /* USER CODE END RTOS_EVENTS */
-
-  /* Start scheduler */
-  osKernelStart();
-
-  /* We should never get here as control is now taken by the scheduler */
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
@@ -203,6 +137,17 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+	  /*
+	 TEST_IO_RTOS(data);
+	 if( data == 1 || data == 2)
+	 {
+		 HAL_UART_Transmit(&huart1, (uint8_t*)message2, strlen(message2), HAL_MAX_DELAY);
+	 }
+	 data=0;
+
+	  */
+	  MSM_Runtime(&MachineStateData);
+	  HAL_Delay(10);
   }
   /* USER CODE END 3 */
 }
@@ -229,11 +174,11 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV2;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV1;
   RCC_OscInitStruct.PLL.PLLN = 8;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV32;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
-  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV8;
+  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -246,7 +191,7 @@ void SystemClock_Config(void)
   RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
   RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_1) != HAL_OK)
   {
     Error_Handler();
   }
@@ -254,7 +199,7 @@ void SystemClock_Config(void)
   */
   PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1|RCC_PERIPHCLK_ADC;
   PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK1;
-  PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_SYSCLK;
+  PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLLADC;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK)
   {
     Error_Handler();
@@ -281,13 +226,13 @@ static void MX_ADC1_Init(void)
   /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion)
   */
   hadc1.Instance = ADC1;
-  hadc1.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
+  hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
   hadc1.Init.Resolution = ADC_RESOLUTION_12B;
   hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
   hadc1.Init.ScanConvMode = ADC_SCAN_SEQ_FIXED;
   hadc1.Init.EOCSelection = ADC_EOC_SEQ_CONV;
-  hadc1.Init.LowPowerAutoWait = ENABLE;
-  hadc1.Init.LowPowerAutoPowerOff = ENABLE;
+  hadc1.Init.LowPowerAutoWait = DISABLE;
+  hadc1.Init.LowPowerAutoPowerOff = DISABLE;
   hadc1.Init.ContinuousConvMode = ENABLE;
   hadc1.Init.NbrOfConversion = 1;
   hadc1.Init.DiscontinuousConvMode = DISABLE;
@@ -295,9 +240,9 @@ static void MX_ADC1_Init(void)
   hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
   hadc1.Init.DMAContinuousRequests = ENABLE;
   hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
-  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_19CYCLES_5;
+  hadc1.Init.SamplingTimeCommon1 = ADC_SAMPLETIME_160CYCLES_5;
   hadc1.Init.OversamplingMode = DISABLE;
-  hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_LOW;
+  hadc1.Init.TriggerFrequencyMode = ADC_TRIGGER_FREQ_HIGH;
   if (HAL_ADC_Init(&hadc1) != HAL_OK)
   {
     Error_Handler();
@@ -387,38 +332,6 @@ static void MX_ADC1_Init(void)
 }
 
 /**
-  * @brief TIM17 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM17_Init(void)
-{
-
-  /* USER CODE BEGIN TIM17_Init 0 */
-
-  /* USER CODE END TIM17_Init 0 */
-
-  /* USER CODE BEGIN TIM17_Init 1 */
-
-  /* USER CODE END TIM17_Init 1 */
-  htim17.Instance = TIM17;
-  htim17.Init.Prescaler = 0;
-  htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim17.Init.Period = 65535;
-  htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim17.Init.RepetitionCounter = 0;
-  htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim17) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM17_Init 2 */
-
-  /* USER CODE END TIM17_Init 2 */
-
-}
-
-/**
   * @brief USART1 Initialization Function
   * @param None
   * @retval None
@@ -434,7 +347,7 @@ static void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
+  huart1.Init.BaudRate = 9600;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
@@ -506,11 +419,11 @@ static void MX_GPIO_Init(void)
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(LED_G_GPIO_Port, LED_G_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : Power_Switch_Pin */
-  GPIO_InitStruct.Pin = Power_Switch_Pin;
+  /*Configure GPIO pin : POWER_SWITCH_Pin */
+  GPIO_InitStruct.Pin = POWER_SWITCH_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-  GPIO_InitStruct.Pull = GPIO_PULLUP;
-  HAL_GPIO_Init(Power_Switch_GPIO_Port, &GPIO_InitStruct);
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(POWER_SWITCH_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pins : LED_B_Pin ENABLE_STEPPER_MOTORS_Pin ENABLE_TOFS_Pin PWM_FAN_Pin
                            ENABLE_RAIL_12V_Pin ENABLE_RAIL_5V_Pin */
@@ -540,85 +453,6 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
-
-/* USER CODE BEGIN Header_main_logic_setup */
-/**
-  * @brief  Function implementing the main_logic_loop thread.
-  * @param  argument: Not used
-  * @retval None
-  */
-/* USER CODE END Header_main_logic_setup */
-void main_logic_setup(void *argument)
-{
-  /* USER CODE BEGIN 5 */
-   // HAL_TIM_Base_Start(&htim17);
-   // MSM_StateInit(&MachineStateData);
-  /* Infinite loop */
-  for(;;)
-  {
-     // MSM_RunStateRuntime(&MachineStateData);
-      //zablokowanie pamieci wspoldzielonej
-    //  xSemaphoreTake(modbus_h.ModBusSphrHandle , 100);
-    //  HAL_GPIO_WritePin(LED_B_GPIO_Port, LED_B_Pin, modbus_h.au16regs[0] & 0x1);
-
-      //synchronizacja danych
-   //   ModbusDATA[1]=MachineStateData.FanSpeedRPM;
-   ///   MSM_DataCopy(&ModbusDATA[2],&MachineStateData.AnalogInputs.ADCInput[0],12);
-
-//      xSemaphoreGive(modbus_h.ModBusSphrHandle);
-	//odblokowanie pamieci wspoldzielonej
-
-      uint32_t TmpFanSPeed=__HAL_TIM_GetCounter(&htim17);
-      htim17.Instance->CNT=0;
-      MachineStateData.FanSpeedRPM=TmpFanSPeed*300;
-      osDelay(2);
-
-  }
-  /* USER CODE END 5 */
-}
-
-/* USER CODE BEGIN Header_modbus_init_task */
-/**
-* @brief Function implementing the Modbus_Task thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_modbus_init_task */
-void modbus_init_task(void *argument)
-{
-  /* USER CODE BEGIN modbus_init_task */
-
-  /* Infinite loop */
-  for(;;)
-  {
-
-      //HAL_GPIO_TogglePin(LED_B_GPIO_Port,LED_B_Pin);
-
-      osDelay(2000);
-  }
-  /* USER CODE END modbus_init_task */
-}
-
-/**
-  * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM1 interrupt took place, inside
-  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
-  * a global variable "uwTick" used as application time base.
-  * @param  htim : TIM handle
-  * @retval None
-  */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-  /* USER CODE BEGIN Callback 0 */
-
-  /* USER CODE END Callback 0 */
-  if (htim->Instance == TIM1) {
-    HAL_IncTick();
-  }
-  /* USER CODE BEGIN Callback 1 */
-
-  /* USER CODE END Callback 1 */
-}
 
 /**
   * @brief  This function is executed in case of error occurrence.
