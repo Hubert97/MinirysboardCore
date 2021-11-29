@@ -33,12 +33,12 @@ extern "C" {
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-extern UART_HandleTypeDef huart1;
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
-
+extern UART_HandleTypeDef huart1;
 extern uint16_t ModbusDATA[16];
 extern struct MSM_StateDataType MachineStateData;
 /* USER CODE END ET */

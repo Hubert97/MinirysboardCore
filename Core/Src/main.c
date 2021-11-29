@@ -25,6 +25,7 @@
 #include "minirysboard_state_machine_utils.h"
 #include "msm_runtime.h"
 #include "IO_check.h"
+#include "comms_handler.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -52,10 +53,11 @@ UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
 uint8_t data;
-
+struct COM_State serial;
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	/* Modbus RTU TX callback BEGIN */
+	COM_RX_Handler(&serial,data);
 	HAL_UART_Receive_IT(&huart1, &data, 1);
 }
 
@@ -113,6 +115,7 @@ int main(void)
   MX_ADC1_Init();
   MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
+  COM_State_Init(&serial);
   HAL_UART_Receive_IT(&huart1, &data, 1);
 
 
@@ -120,9 +123,11 @@ int main(void)
    HAL_ADC_Start(&hadc1);
    MSM_StateInit(&MachineStateData);
 
+/*
    const char message[] = "Self Test Starting\r\n";
    const char message2[] = "Ok\r\n";
    HAL_UART_Transmit(&huart1, (uint8_t*)message, strlen(message), HAL_MAX_DELAY);
+   */
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -132,15 +137,17 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
+	  /*
 	 TEST_IO_RTOS(data);
 	 if( data == 1 || data == 2)
 	 {
 		 HAL_UART_Transmit(&huart1, (uint8_t*)message2, strlen(message2), HAL_MAX_DELAY);
 	 }
 	 data=0;
-	 // MSM_Runtime(&MachineStateData);
-	  HAL_Delay(100);
+
+	  */
+	  MSM_Runtime(&MachineStateData);
+	  HAL_Delay(10);
   }
   /* USER CODE END 3 */
 }
@@ -167,11 +174,11 @@ void SystemClock_Config(void)
   RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
-  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV2;
+  RCC_OscInitStruct.PLL.PLLM = RCC_PLLM_DIV1;
   RCC_OscInitStruct.PLL.PLLN = 8;
-  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV25;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV32;
   RCC_OscInitStruct.PLL.PLLQ = RCC_PLLQ_DIV2;
-  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV2;
+  RCC_OscInitStruct.PLL.PLLR = RCC_PLLR_DIV4;
   if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -340,7 +347,7 @@ static void MX_USART1_UART_Init(void)
 
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
-  huart1.Init.BaudRate = 115200;
+  huart1.Init.BaudRate = 9600;
   huart1.Init.WordLength = UART_WORDLENGTH_8B;
   huart1.Init.StopBits = UART_STOPBITS_1;
   huart1.Init.Parity = UART_PARITY_NONE;
