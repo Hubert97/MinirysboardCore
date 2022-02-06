@@ -39,8 +39,9 @@ extern "C" {
 /* Exported types ------------------------------------------------------------*/
 /* USER CODE BEGIN ET */
 extern UART_HandleTypeDef huart1;
-extern uint16_t ModbusDATA[16];
+extern uint16_t ModbusDATA[24];
 extern struct MSM_StateDataType MachineStateData;
+extern struct FAN_InterfaceS Fan_Handler;
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
